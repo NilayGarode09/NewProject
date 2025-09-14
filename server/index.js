@@ -28,9 +28,7 @@ async function main() {
 main();
 
 // Routes
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
+
 
 app.use("/posts", postRoutes);
 app.use("/user", usersRoutes);
