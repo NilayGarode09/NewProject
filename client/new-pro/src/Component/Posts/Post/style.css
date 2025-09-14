@@ -1,0 +1,12 @@
+.card{
+    background-color: aliceblue;
+    margin: 1%;
+    padding: 1%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2),
+              0 5px 15px rgba(0,0,0,0.15) !important;
+              
+              border-radius: 3% !important;}
+.img{
+    margin: 2%;
+     border-radius: 3% !important;
+}
