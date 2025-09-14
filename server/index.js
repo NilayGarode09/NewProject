@@ -28,7 +28,9 @@ async function main() {
 main();
 
 // Routes
-
+app.get("/", (req, res) => {
+  res.redirect("/posts");
+});
 
 app.use("/posts", postRoutes);
 app.use("/user", usersRoutes);
