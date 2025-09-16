@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 import './style.css';
 
-export default function Posts({ setCurrentId }) {
+export default function Posts({setCurrentId}) {
   const posts = useSelector((state) => state.posts.value || []); 
   // console.log(posts);
 
@@ -16,7 +16,7 @@ export default function Posts({ setCurrentId }) {
     // display: "flex",
     flexWrap: "wrap",
 
-   
+   align :"center",
     gap: 2, // spacing between posts
     width: "100%", // make full width
     p: 2, // padding

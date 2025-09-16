@@ -15,19 +15,21 @@ export const likePost = createAsyncThunk("posts/likePost", async (id) => {
 
 export const deletePost = createAsyncThunk("posts/deletePost", async (id) => {
   const { data } = await api.deletePost(id);
+  console.log(data);
   return data; // check: is this an ID or full post?
 });
 
 export const editPost = createAsyncThunk(
-  "posts/editPost",
+  `form/editPost`,
   async ({ id, post }) => {
     const { data } = await api.editPost(id, post);
     return data;
   }
 );
 
-export const createPost = createAsyncThunk("posts/create", async (post) => {
+export const createPost = createAsyncThunk("form/create", async (post) => {
   const { data } = await api.createPost(post);
+  console.log(data);
   return data;
 });
 
@@ -81,16 +83,12 @@ export const postsSlice = createSlice({
       })
 
       // editPost
-      .addCase(editPost.fulfilled, (state, action) => {
-        state.loading = false;
-        const updatedPost = action.payload;
-        const index = state.value.findIndex(
-          (post) => post._id === updatedPost._id
-        );
-        if (index !== -1) {
-          state.value[index] = updatedPost;
-        }
-      })
+       .addCase(editPost.fulfilled, (state, action) => {
+      const index = state.value.findIndex((p) => p._id === action.payload._id);
+      if (index !== -1) {
+        state.value[index] = action.payload; 
+      }
+    })
 
       // createPost
       .addCase(createPost.fulfilled, (state, action) => {

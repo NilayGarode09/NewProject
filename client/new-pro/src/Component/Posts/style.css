@@ -1,8 +1,10 @@
-.posts{
-    margin: 2%;
-    display: flex;
-    background-color: aliceblue;
-     box-shadow: 0 2px 5px rgba(0,0,0,0.2),
+.posts {
+  margin-top: 2%;
+  display: flex;
+  flex-wrap: wrap;           /* ✅ allows wrapping */
+  justify-content: center;   /* ✅ centers items horizontally */
+  align-items: center;       /* optional: vertical centering */
+  background-color: aliceblue;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2),
               0 5px 15px rgba(0,0,0,0.15) !important;
-              
-            }
+}

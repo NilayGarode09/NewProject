@@ -11,8 +11,8 @@ API.interceptors.request.use((req) => {
 });
 
 export const getPostData = () => API.get("/posts");
-export const createPost = (newPost)=>API.post("/posts",newPost)
-export const editPost = (id, editPost) => API.patch(`/posts/${id}`, editPost);
+export const createPost = (newPost)=>API.post("/form",newPost)
+export const editPost = (id, editPost) => API.patch(`/form/${id}`, editPost);
 export const deletePost = (id) => API.delete(`/posts/${id}`);
 export const likePost = (id)=>API.patch(`/posts/${id}/likeCount`)
 

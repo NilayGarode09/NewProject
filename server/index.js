@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import postRoutes from "./routes/posts.js";
 import usersRoutes from "./routes/users.js";
+import formRoutes from "./routes/form.js";
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.get("/", (req, res) => {
 
 app.use("/posts", postRoutes);
 app.use("/user", usersRoutes);
+app.use("/form",formRoutes)
 
 // Server
 const PORT = process.env.PORT || 8080;

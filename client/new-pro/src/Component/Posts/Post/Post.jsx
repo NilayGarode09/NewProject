@@ -1,67 +1,111 @@
 import "./style.css";
-// 
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
-import FavoriteSharpIcon from '@mui/icons-material/FavoriteSharp';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-
-import DeleteIcon from '@mui/icons-material/Delete';
+import { useState } from "react";
+import {
+  Card,
+  CardHeader,
+  CardMedia,
+  CardContent,
+  CardActions,
+  IconButton,
+  Typography
+} from "@mui/material";
+import FavoriteSharpIcon from "@mui/icons-material/FavoriteSharp";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { red } from "@mui/material/colors";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-// import { remove } from "../../features/post/postSlice";
-import { format } from 'date-fns';
-import "./style.css"
-import { likePost,deletePost,editPost } from "../../../features/post/postSlice.js";
+import { format } from "date-fns";
+import { likePost, deletePost } from "../../../features/post/postSlice.js";
+
 export default function Post({ post, setCurrentId }) {
+  const user = JSON.parse(localStorage.getItem("profile"));
+
+const Like = () => {
+  const iconSize = 18; // smaller than default 24
+  const fontSize = "0.8rem"; // smaller text
+
+  if (post.likes.length > 0) {
+    return post.likes.find((like) => like === user?.result?._id) ? (
+      <>
+        <FavoriteSharpIcon sx={{ color: red[500] }} />
+        &nbsp;
+        {post.likes.length > 2
+          ? `You and ${post.likes.length - 1} others`
+          : `${post.likes.length} like${post.likes.length > 1 ? "s" : ""}`}
+      </>
+    ) : (
+      <>
+        <FavoriteSharpIcon sx={{ color: red[500] }} />
+        &nbsp;{post.likes.length}{" "}
+        {post.likes.length === 1 ? "Like" : "Likes"}
+      </>
+    );
+  }}
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handleEdit=(id,post)=>{
-    dispatch(editPost({ id, post }));    
+
+  const handleEdit = (id) => {
     setCurrentId(id);
-    // console.log(post);
-    // console.log(post.createdAt+ "hi");
-  }
+    navigate(`/form/${id}`);
+  };
+
+  const handleDelete = (id) => {
+    dispatch(deletePost(id)).then(() => {
+      navigate("/");
+      window.location.reload();
+    });
+  };
+
   return (
-    <Card className="card" 
-    sx={{
-    width: {
-      xs: "100%",   // full width on small screens
-      sm: "90%",    // 90% on tablets
-      md: "70%",    // 70% on medium screens
-      lg: "50%",    // 50% on desktops
-    },
-    minWidth: 250,   // optional cap
-    // margin: "auto",  // center horizontally
-  }}>
-       <CardHeader
+    <Card
+      className="card"
+      sx={{
+        width: 300, // fixed width
+        height: 450, // fixed height
+        display: "flex",
+        flexDirection: "column",
+        borderRadius: 2,
+        boxShadow: 3,
+        overflow: "hidden",
+      }}
+    >
+      <CardHeader
         action={
-         <IconButton aria-label="settings" onClick={() => handleEdit(post._id, post)}>
-          <MoreVertIcon />
-        </IconButton>
+          <IconButton aria-label="edit" onClick={() => handleEdit(post._id)}>
+            <MoreVertIcon />
+          </IconButton>
         }
         title={post.title}
         subheader={format(new Date(post.createdAt), "dd MMM yyyy, hh:mm a")}
       />
+
       <CardMedia
         component="img"
-        height="194"
+        height="200"
         image={post.selectedFile}
-        alt="Paella dish"
-        className="img"
-        
+        alt={post.title}
+        sx={{ objectFit: "cover" }}
       />
-       <CardContent>
-         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-           {post.message}
-         </Typography>
-     {post.tags?.map((tag, index) => (
+
+      <CardContent sx={{ flexGrow: 1, overflow: "hidden" }}>
+        <Typography
+          variant="body2"
+          sx={{
+            color: "text.secondary",
+            display: "-webkit-box",
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: "vertical",
+            overflow: "hidden",
+          }}
+        >
+          {post.message}
+        </Typography>
+
+        {post.tags?.map((tag, index) => (
           <Typography
             key={index}
+            variant="caption"
             sx={{ color: "text.secondary", mr: 1 }}
             display="inline"
           >
@@ -69,18 +113,23 @@ export default function Post({ post, setCurrentId }) {
           </Typography>
         ))}
       </CardContent>
-      <CardActions disableSpacing>
-        <IconButton aria-label="like" onClick={() => dispatch(likePost(post._id))}>
-          <FavoriteSharpIcon sx={{ color: "red" }} />
-        </IconButton>
-        <Typography variant="body2">Likes: {post.likeCount}</Typography>
 
-        <IconButton aria-label="delete" onClick={() => dispatch(deletePost(post._id))}>
-          <DeleteIcon />
-         </IconButton>
-      </CardActions>
-      
+      {user && (
+        <CardActions disableSpacing sx={{ mt: "auto" }}>
+          <IconButton
+            aria-label="like"
+            onClick={() => dispatch(likePost(post._id))}
+          >
+             <FavoriteSharpIcon sx={{ color: red[500] }} />
+      &nbsp;{Like()}
+            {/* <FavoriteSharpIcon sx={{ color: red[500] }} /> */}
+          </IconButton>
+
+          <IconButton aria-label="delete" onClick={() => handleDelete(post._id)}>
+            <DeleteIcon />
+          </IconButton>
+        </CardActions>
+      )}
     </Card>
   );
 }
-// 
